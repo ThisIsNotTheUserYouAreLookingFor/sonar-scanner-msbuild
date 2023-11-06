@@ -131,7 +131,7 @@ stages:
                 verbosityRestore: 'normal'  # Default is noisy 'Detailed'
             - task: DotNetCoreCLI@2
               env:
-                SignAssembly: 'true'
+                SignAssembly: 'false'  # ToDo: Code signing is temporarily disabled until new certificate is properly set up
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
               displayName: 'Build and prepare signing $(tfsProcessorSolution)'
               inputs:
@@ -170,7 +170,7 @@ stages:
                 arguments: '-t -j -o build'
             - task: DotNetCoreCLI@2
               env:
-                SignAssembly: 'true'
+                SignAssembly: 'false'  # ToDo: Code signing is temporarily disabled until new certificate is properly set up
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
               displayName: 'Build and prepare signing $(solution)'
               inputs:
@@ -245,6 +245,7 @@ stages:
               displayName: "Mend scan"
             - task: PowerShell@2
               displayName: Sign assemblies
+              enabled: false  # ToDo: Code signing is temporarily disabled until new certificate is properly set up
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
               env:
                 SIGNTOOL_PATH: 'C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.17763.0\\x64\\signtool.exe'
@@ -264,6 +265,7 @@ stages:
                 versioningScheme: 'off'
             - task: NuGetCommand@2
               displayName: "Sign NuGet packages"
+              enabled: false  # ToDo: Code signing is temporarily disabled until new certificate is properly set up
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
               inputs:
                 command: 'custom'
@@ -438,7 +440,7 @@ stages:
                 SONAR_DOTNET_VERSION: '9.7.0.75501' # sonar-dotnet 9.8 will mention SQ 9.9 as minimum supported version
                 SONAR_CFAMILYPLUGIN_VERSION: "6.20.5.49286"  # LATEST_RELEASE of CFAMILY is not compatible with old SQ
                 MSBUILD_PATH: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\MSBuild.exe"
-                JDKVERSION: "1.17"
+                JDKVERSION: "1.11"
                 TEST_SUITE: "**/SonarQubeTestSuite.java"
               vs2022_latest89:
                 PRODUCT: "SonarQube"
@@ -446,7 +448,7 @@ stages:
                 SONAR_DOTNET_VERSION: '9.7.0.75501' # sonar-dotnet 9.8 will mention SQ 9.9 as minimum supported version
                 SONAR_CFAMILYPLUGIN_VERSION: "6.20.5.49286"  # LATEST_RELEASE of CFAMILY is not compatible with old SQ
                 MSBUILD_PATH: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\MSBuild\\Current\\Bin\\MSBuild.exe"
-                JDKVERSION: "1.17"
+                JDKVERSION: "1.11"
                 TEST_SUITE: "**/SonarQubeTestSuite.java"
               vs2017_latest99:
                 PRODUCT: "SonarQube"
